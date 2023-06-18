@@ -71,9 +71,9 @@ function audioControls(event) {
         .getElementById("volume-icon")
         .classList.remove("fa-volume-xmark");
       document.getElementById("volume-icon").classList.add("fa-volume-high");
-      if (currentVolume === 0) {
+      if (currentVolume === "0") {
         volumneControl.value = "25";
-        audioControl.volume = 2.5;
+        audioControl.volume = "2.5";
       } else {
         audioControl.volume = currentVolume / 100;
         volumneControl.value = "" + currentVolume + "";
