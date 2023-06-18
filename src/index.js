@@ -1,12 +1,48 @@
 let audioControl = document.getElementById("audio");
 currentVolume = 25;
 let volumneControl = document.getElementById("volume-control");
+let seekslider = document.getElementById("seekslider");
+var seekto;
+audioControl.addEventListener("timeupdate", function () {
+  seekslider.value = "0";
+  seektimeupdate();
+});
+seekslider.addEventListener("mousedown", function (event) {
+  seeking = true;
+  seek(event);
+});
+seekslider.addEventListener("mousemove", function (event) {
+  seek(event);
+});
+seekslider.addEventListener("mouseup", function () {
+  seeking = false;
+});
+function seek(event) {
+  if (seeking) {
+    seekslider.value = event.clientX - seekslider.offsetLeft;
+    seekto = audioControl.duration * (seekslider.value / 100);
+    audioControl.currentTime = seekto;
+  }
+}
+function seektimeupdate() {
+  var nt = audioControl.currentTime * (100 / audioControl.duration);
+  if (isNaN(nt)) {
+    seekslider.value = "0";
+  } else {
+    seekslider.value = nt;
+  }
+  if (audioControl.currentTime === audioControl.duration) {
+    document.getElementById("play").classList.remove("fa-pause");
+    document.getElementById("play").classList.add("fa-play");
+  }
+}
 function handleFiles(event) {
   var files = event.target.files;
   $("#src").attr("src", URL.createObjectURL(files[0]));
   document.getElementById("audio").load();
+  seekslider.value = "0";
   document.getElementById("audioDiv").classList.remove("hide");
-  e.preventDefault();
+  event.preventDefault();
 }
 document.getElementById("uploadDiv").addEventListener("change", handleFiles);
 
