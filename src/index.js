@@ -2,7 +2,17 @@ let audioControl = document.getElementById("audio");
 currentVolume = 25;
 let volumneControl = document.getElementById("volume-control");
 let seekslider = document.getElementById("seekslider");
-var seekto;
+var seekto, seeking;
+let audioSource = null;
+let analyser = null;
+let audioCtx = null;
+let audio1 = audioControl;
+audio1.crossOrigin = "anonymous";
+
+const canvas = document.getElementById("canvas");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
 audioControl.addEventListener("timeupdate", function () {
   seekslider.value = "0";
   seektimeupdate();
@@ -44,22 +54,6 @@ function handleFiles(event) {
   document.getElementById("audioDiv").classList.remove("hide");
   event.preventDefault();
 }
-document.getElementById("uploadDiv").addEventListener("change", handleFiles);
-
-volumneControl.addEventListener("change", function (e) {
-  currentVolume = volumneControl.value;
-  audioControl.volume = e.currentTarget.value / 100;
-  if (e.currentTarget.value === "0") {
-    document.getElementById("volume-icon").classList.remove("fa-volume-high");
-    document.getElementById("volume-icon").classList.add("fa-volume-xmark");
-  } else if (
-    document.getElementById("volume-icon").classList.contains("fa-volume-xmark")
-  ) {
-    document.getElementById("volume-icon").classList.remove("fa-volume-xmark");
-    document.getElementById("volume-icon").classList.add("fa-volume-high");
-  }
-});
-
 function audioControls(event) {
   if (event.target.id === "play") {
     if (document.getElementById("play").classList.contains("fa-play")) {
@@ -70,25 +64,6 @@ function audioControls(event) {
       audioControl.pause();
       document.getElementById("play").classList.remove("fa-pause");
       document.getElementById("play").classList.add("fa-play");
-    }
-  }
-  if (event.target.id === "increaseVolume") {
-    console.log(audioControl.volume === 0);
-    if (audioControl.volume === 0) {
-      document.getElementById("mute").classList.remove("fa-volume-high");
-      document.getElementById("mute").classList.add("fa-volume-xmark");
-      audioControl.volume = currentVolume;
-    } else {
-      audioControl.volume += 0.1;
-    }
-  }
-  if (event.target.id === "decreaseVolume") {
-    if (audioControl.volume === 0) {
-      document.getElementById("mute").classList.remove("fa-volume-high");
-      document.getElementById("mute").classList.add("fa-volume-xmark");
-      audioControl.volume = currentVolume;
-    } else {
-      audioControl.volume -= 0.1;
     }
   }
   if (event.target.id === "forward") {
@@ -127,7 +102,96 @@ function audioControls(event) {
   }
 }
 
+volumneControl.addEventListener("change", function (e) {
+  currentVolume = volumneControl.value;
+  audioControl.volume = e.currentTarget.value / 100;
+  if (e.currentTarget.value === "0") {
+    document.getElementById("volume-icon").classList.remove("fa-volume-high");
+    document.getElementById("volume-icon").classList.add("fa-volume-xmark");
+  } else if (
+    document.getElementById("volume-icon").classList.contains("fa-volume-xmark")
+  ) {
+    document.getElementById("volume-icon").classList.remove("fa-volume-xmark");
+    document.getElementById("volume-icon").classList.add("fa-volume-high");
+  }
+});
+function visual() {
+  audioCtx = audioCtx || new AudioContext();
+  const ctx = canvas.getContext("2d");
+
+  var playPromise;
+
+  if (playPromise !== undefined) {
+    playPromise
+      .then((_) => {
+        if (!audioControl.paused) {
+          audioControl.play();
+        } else {
+          audioControl.pause();
+        }
+      })
+      .catch((error) => {});
+  }
+  if (!audioSource) {
+    audioSource =
+      audioSource ||
+      audioCtx.createMediaElementSource(document.getElementById("audio"));
+    analyser = audioCtx.createAnalyser();
+    audioSource.connect(analyser);
+    analyser.connect(audioCtx.destination);
+  }
+  analyser.fftSize = 128;
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  const barWidth = canvas.width / 2 / bufferLength;
+
+  let x = 0;
+
+  function animate() {
+    x = 0;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    analyser.getByteFrequencyData(dataArray);
+    drawVisualizer({ bufferLength, dataArray, barWidth });
+    requestAnimationFrame(animate);
+  }
+
+  const drawVisualizer = ({ bufferLength, dataArray, barWidth }) => {
+    let barHeight;
+    for (let i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i];
+      const red = (i * barHeight) / 10;
+      const green = i * 4;
+      const blue = barHeight / 4 - 12;
+      ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+      ctx.fillRect(
+        canvas.width / 2 - x,
+        canvas.height - barHeight,
+        barWidth,
+        barHeight
+      );
+      x += barWidth;
+    }
+
+    for (let i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i];
+      const red = (i * barHeight) / 10;
+      const green = i * 4;
+      const blue = barHeight / 4 - 12;
+      ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+      ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+      x += barWidth;
+    }
+  };
+
+  animate();
+}
+
+document.getElementById("app").addEventListener("click", visual);
 document.getElementById("play").addEventListener("click", audioControls);
 document.getElementById("forward").addEventListener("click", audioControls);
 document.getElementById("backward").addEventListener("click", audioControls);
 document.getElementById("volume").addEventListener("click", audioControls);
+document.getElementById("uploadDiv").addEventListener("change", handleFiles);
+
+// Show loading animation.

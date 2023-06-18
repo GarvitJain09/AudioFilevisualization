@@ -11,7 +11,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 </head>
 
 <body>
-<div id="app">		 
+<div id="app">		
 		<label for="upload" class='uploadlabel' id='uploadDiv'>
 			<input type="file" id="upload" class='hide' />Select audio file
 			</label>
@@ -19,15 +19,18 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 		<audio id="audio" >
   			<source src="" id="src" />
 		</audio>
-		<input id="seekslider" type="range"  value="0">
+		<div id="seeksliderDiv">
+		<input id="seekslider" type="range"  value="0" class="sliderLength">
+		</div>
   		<i id ="play" class="fa fa-play"></i> 
 		<div id="volume">
 		<i  class="fa-solid fa-volume-high" id='volume-icon'></i>
-		<input type="range" id="volume-control" value="20" min="0" max="100">
+		<input type="range" id="volume-control" value="20" min="0" max="100" class="sliderVolume">
 		</div>
   		<i id="forward" class="fa fa-forward"></i>
   		<i id="backward" class="fa fa-backward"></i>
 	</div>
+	  <canvas id="canvas"></canvas> 
 </div>
 	<script src="src/index.js">
 	</script>

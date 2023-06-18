@@ -60,7 +60,8 @@ body {
 #play,
 #forward,
 #backward,
-#volume {
+#volume,
+#seeksliderDiv {
   border: 2px solid transparent;
   border-radius: 6px;
   text-align: center;
@@ -71,7 +72,8 @@ body {
 #play:hover,
 #forward:hover,
 #backward:hover,
-#volume:hover {
+#volume:hover,
+#seeksliderDiv:hover {
   box-shadow: 3px -3px 4px 1px black;
   padding: 5px;
 }
@@ -91,6 +93,14 @@ body {
   height: auto;
   opacity: 1;
 }
+.sliderLength {
+  accent-color: red;
+}
+
+.sliderVolume {
+  accent-color: green;
+}
+
 /* .volume-icon {
   display: flex;
 } */
