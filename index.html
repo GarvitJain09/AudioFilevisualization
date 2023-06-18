@@ -4,19 +4,33 @@
 <head>
 	<title>Parcel Sandbox</title>
 	<meta charset="UTF-8" />
+	<link rel="stylesheet" href='./src/styles.css'></link>
+	<link rel="stylesheet" 
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
 <body>
-<div id="app">
-	<input type="file" id="upload" />
-<audio id="audio" controls class='hide'>
-  <source src="" id="src" />
-</audio>
+<div id="app">		 
+		<label for="upload" class='uploadlabel' id='uploadDiv'>
+			<input type="file" id="upload" class='hide' />Select audio file
+			</label>
+	<div id='audioDiv' class='audioDiv hide '>
+		<audio id="audio" >
+  			<source src="" id="src" />
+		</audio>
+  		<i id ="play" class="fa fa-play"></i> 
+		<div id="volume">
+		<i  class="fa-solid fa-volume-high" id='volume-icon'></i>
+		<input type="range" id="volume-control" value="20" min="0" max="100">
+		</div>
+  		<i id="forward" class="fa fa-forward"></i>
+  		<i id="backward" class="fa fa-backward"></i>
+	</div>
 </div>
-
 	<script src="src/index.js">
 	</script>
+
 </body>
 
 </html>
