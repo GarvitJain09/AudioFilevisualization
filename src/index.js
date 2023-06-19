@@ -7,6 +7,9 @@ let audioSource = null;
 let analyser = null;
 let audioCtx = null;
 let audio1 = audioControl;
+let r = 0,
+  g = 0,
+  b = 0;
 audio1.crossOrigin = "anonymous";
 
 const canvas = document.getElementById("canvas");
@@ -161,10 +164,7 @@ function visual() {
     let barHeight;
     for (let i = 0; i < bufferLength; i++) {
       barHeight = dataArray[i];
-      const red = (i * barHeight) / 10;
-      const green = i * 4;
-      const blue = barHeight / 4 - 12;
-      ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+      ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
       ctx.fillRect(
         canvas.width / 2 - x,
         canvas.height - barHeight,
@@ -176,10 +176,7 @@ function visual() {
 
     for (let i = 0; i < bufferLength; i++) {
       barHeight = dataArray[i];
-      const red = (i * barHeight) / 10;
-      const green = i * 4;
-      const blue = barHeight / 4 - 12;
-      ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+      ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
       ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
       x += barWidth;
     }
@@ -187,11 +184,23 @@ function visual() {
 
   animate();
 }
-
+document
+  .getElementById("colorforChart")
+  .addEventListener("change", function (e) {
+    r = parseInt(e.currentTarget.value.slice(1, 3), 16);
+    g = parseInt(e.currentTarget.value.slice(3, 5), 16);
+    b = parseInt(e.currentTarget.value.slice(5, 7), 16);
+  });
 document.getElementById("app").addEventListener("click", visual);
 document.getElementById("play").addEventListener("click", audioControls);
 document.getElementById("forward").addEventListener("click", audioControls);
 document.getElementById("backward").addEventListener("click", audioControls);
 document.getElementById("volume").addEventListener("click", audioControls);
+document
+  .getElementById("playBackSpeed")
+  .addEventListener("change", function (e) {
+    console.log(e.currentTarget.value);
+    audioControl.playbackRate = e.currentTarget.value;
+  });
 
 // Show loading animation.

@@ -30,13 +30,6 @@
   height: 100%;
   pointer-events: none;
 }
-/* #app {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-} */
 
 #app {
   position: absolute;
@@ -93,7 +86,9 @@
 #forward,
 #backward,
 #volume,
-#seeksliderDiv {
+#seeksliderDiv,
+#playBackSpeed,
+#colorforChart {
   border: 2px solid transparent;
   border-radius: 6px;
   text-align: center;
@@ -105,10 +100,17 @@
 #forward:hover,
 #backward:hover,
 #volume:hover,
-#seeksliderDiv:hover {
+#seeksliderDiv:hover,
+#playBackSpeed:hover,
+#colorforChart:hover {
   box-shadow: 3px -3px 4px 1px black;
   padding: 5px;
 }
+/* #{
+  border-radius: 4px;
+    background: transparent;
+    border: 0;
+} */
 #volume-control {
   visibility: hidden;
   width: 0;
@@ -131,6 +133,15 @@
 
 .sliderVolume {
   accent-color: green;
+}
+select {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+select:focus {
+  outline: none;
 }
 
 /* .volume-icon {
