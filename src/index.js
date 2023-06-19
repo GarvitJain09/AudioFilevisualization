@@ -11,6 +11,7 @@ let r = 0,
   g = 0,
   b = 0;
 audio1.crossOrigin = "anonymous";
+var ranges = document.querySelectorAll("input[type=range]");
 
 const canvas = document.getElementById("canvas");
 canvas.width = window.innerWidth;
@@ -55,6 +56,11 @@ function handleFiles(event) {
   document.getElementById("audio").load();
   seekslider.value = "0";
   document.getElementById("audioDiv").classList.remove("hide");
+  if (document.getElementById("play").classList.contains("fa-pause")) {
+    document.getElementById("play").classList.remove("fa-pause");
+    document.getElementById("play").classList.add("fa-play");
+  }
+
   // event.preventDefault();
 }
 document.getElementById("uploadDiv").addEventListener("change", handleFiles);
@@ -121,6 +127,8 @@ function volumeChange(e) {
 volumneControl.addEventListener("change", volumeChange);
 function visual() {
   audioCtx = audioCtx || new AudioContext();
+  const ctx = canvas.getContext("2d");
+
   if (!audioSource) {
     audioSource =
       audioSource ||
@@ -129,45 +137,19 @@ function visual() {
     audioSource.connect(analyser);
     analyser.connect(audioCtx.destination);
   }
+  filter = audioCtx.createBiquadFilter();
+  audioSource.connect(filter);
+  filter.connect(audioCtx.destination);
 
-  const ctx = canvas.getContext("2d");
-  // var highShelf = audioCtx.createBiquadFilter();
-  // var lowShelf = audioCtx.createBiquadFilter();
-  // var highPass = audioCtx.createBiquadFilter();
-  // var lowPass = audioCtx.createBiquadFilter();
-
-  // audioSource.connect(highShelf);
-  // highShelf.connect(lowShelf);
-  // lowShelf.connect(highPass);
-  // highPass.connect(lowPass);
-  // lowPass.connect(audioCtx.destination);
-
-  // highShelf.type = "highshelf";
-  // highShelf.frequency.value = 4700;
-  // highShelf.gain.value = 50;
-
-  // lowShelf.type = "lowshelf";
-  // lowShelf.frequency.value = 35;
-  // lowShelf.gain.value = 50;
-
-  // highPass.type = "highpass";
-  // highPass.frequency.value = 800;
-  // highPass.Q.value = 0.7;
-
-  // lowPass.type = "lowpass";
-  // lowPass.frequency.value = 880;
-  // lowPass.Q.value = 0.7;
-
-  // var ranges = document.querySelectorAll("input[type=range]");
-  // ranges.forEach(function (range) {
-  //   range.addEventListener("input", function () {
-  //     console.log(this, range.getAttribute("data-filter"),);
-  //     //       biquadFilter.type = "lowshelf";
-  //     // biquadFilter.frequency.setValueAtTime(1000, audioCtx.currentTime);
-  //     // biquadFilter.gain.setValueAtTime(25, audioCtx.currentTime);
-  //     // window[this.dataset.filter][this.dataset.param].value = this.value;
-  //   });
-  // });
+  ranges.forEach(function (range) {
+    range.addEventListener("change", function () {
+      filter.type = range.getAttribute("data-filter");
+      filter.gain.value =
+        range.getAttribute("data-param") === "gain" ? range.value : 0;
+      filter.frequency.value =
+        range.getAttribute("data-param") === "frequency" ? range.value : 0;
+    });
+  });
 
   var playPromise;
 
