@@ -52,8 +52,9 @@ function handleFiles(event) {
   document.getElementById("audio").load();
   seekslider.value = "0";
   document.getElementById("audioDiv").classList.remove("hide");
-  event.preventDefault();
+  // event.preventDefault();
 }
+document.getElementById("uploadDiv").addEventListener("change", handleFiles);
 function audioControls(event) {
   if (event.target.id === "play") {
     if (document.getElementById("play").classList.contains("fa-play")) {
@@ -101,8 +102,7 @@ function audioControls(event) {
     }
   }
 }
-
-volumneControl.addEventListener("change", function (e) {
+function volumeChange(e) {
   currentVolume = volumneControl.value;
   audioControl.volume = e.currentTarget.value / 100;
   if (e.currentTarget.value === "0") {
@@ -114,7 +114,8 @@ volumneControl.addEventListener("change", function (e) {
     document.getElementById("volume-icon").classList.remove("fa-volume-xmark");
     document.getElementById("volume-icon").classList.add("fa-volume-high");
   }
-});
+}
+volumneControl.addEventListener("change", volumeChange);
 function visual() {
   audioCtx = audioCtx || new AudioContext();
   const ctx = canvas.getContext("2d");
@@ -192,6 +193,5 @@ document.getElementById("play").addEventListener("click", audioControls);
 document.getElementById("forward").addEventListener("click", audioControls);
 document.getElementById("backward").addEventListener("click", audioControls);
 document.getElementById("volume").addEventListener("click", audioControls);
-document.getElementById("uploadDiv").addEventListener("change", handleFiles);
 
 // Show loading animation.
