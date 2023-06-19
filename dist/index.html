@@ -2,15 +2,128 @@
 <html>
 
 <head>
-	<title>Parcel Sandbox</title>
-	<meta charset="UTF-8">
-<link rel="stylesheet" href="/src.a2b27638.css"></head>
+	<title>Audio</title>
+	<meta charset="UTF-8"> 
+	<link rel="stylesheet" href="/styles.dd855970.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="/styles.dd855970.js"></script></head>
 
 <body>
-	<div id="app"></div>
+<div id="app">		
+	<canvas id="canvas"></canvas> 
+	<div id="audioControls">
+		<label for="upload" class="uploadlabel" id="uploadDiv">
+			<input type="file" id="upload" class="hide">Select audio file
+		</label>
+		<div id="audioDiv" class="audioDiv hide ">
+			<audio id="audio">
+  				<source src="" id="src">
+			</audio>
+			<div id="seeksliderDiv">
+				<input id="seekslider" type="range" value="0" class="sliderLength">
+			</div>
+  			<i id="play" class="fa fa-play"></i> 
+			<div id="volume">
+				<i class="fa-solid fa-volume-high" id="volume-icon"></i>
+				<input type="range" id="volume-control" value="20" min="0" max="100" class="sliderVolume">
+			</div>
+  			<i id="forward" class="fa fa-forward"></i>
+  			<i id="backward" class="fa fa-backward"></i>
+			<input type="color" id="colorforChart">
+			<select name="Play Back Speed" id="playBackSpeed" class="dropdown">
+        		<option value="1.0">1</option>
+        		<option value=".5">.5</option>
+        		<option value="3.0">3</option>
+      		</select>
+			<div id="equalizerSettings">
+			
+				<i class="fa-solid fa-sliders" id="equalizer"></i>
+				<div id="equalizerDiv" class="equalizer hide">
+	<span>Equalizer</span>
+					<div class="section">
+						<div class="title">HF</div>
+						<div class="sliders">
+						<div class="range-slider">
+							<span class="scope">22</span>
+							<input type="range" id="highShelf_frequency" class="vertical" min="4700" max="6000" step="100" value="2000" data-filter="highshelf" data-param="frequency">
+							<span class="scope scope-min">4.7</span>
+							<span class="param">kHz</span>  
+						</div>
+						<div class="range-slider">
+							<span class="scope">50</span>
+							<input type="range" id="highShelf_gain" class="vertical" min="-50" max="50" value="50" data-filter="highshelf" data-param="gain">
+							<span class="scope scope-min">-50</span>
+							<span class="param">dB</span>  
+						</div>
+						</div>
+					</div>
+						
+					<div class="section">
+						<div class="title">LF</div>
+						<div class="sliders">
+						<div class="range-slider">
+							<span class="scope">220</span>
+							<input type="range" class="vertical" min="35" max="400" step="1" value="200" data-filter="lowshelf" data-param="frequency">
+							<span class="scope scope-min">35</span>
+							<span class="param">Hz</span>  
+						</div>
+						<div class="range-slider">
+							<span class="scope">50</span>
+							<input type="range" class="vertical" min="-50" max="50" value="50" data-filter="lowshelf" data-param="gain">
+							<span class="scope scope-min">-50</span>
+							<span class="param">dB</span>  
+						</div>
+						</div>
+					</div>
+						
+					<div class="section">
+						<div class="title">HMF</div>
+						<div class="sliders">
+						<div class="range-slider">
+							<span class="scope">5.9</span>
+							<input type="range" class="vertical" min="800" max="5900" step="100" value="800" data-filter="highpass" data-param="frequency">
+							<span class="scope scope-min">0.8</span>
+							<span class="param">kHz</span>  
+						</div>
+						<div class="range-slider">
+							<span class="scope">12</span>
+							<input type="range" class="vertical" min="0.7" max="12" step="0.1" value="0.7" data-filter="highpass" data-param="Q">
+							<span class="scope scope-min">0.7</span>
+							<span class="param">Q</span>  
+						</div>
+						</div>
+					</div>  
+						
+					<div class="section">
+						<div class="title">LMF</div>
+						<div class="sliders">
+						<div class="range-slider">
+							<span class="scope">1600</span>
+							<input type="range" class="vertical" min="80" max="1600" step="10" value="880" data-filter="lowpass" data-param="frequency">
+							<span class="scope scope-min">80</span>
+							<span class="param">Hz</span>  
+						</div>
+						<div class="range-slider">
+							<span class="scope">12</span>
+							<input type="range" class="vertical" min="0.7" max="12" step="0.1" value="0.7" data-filter="lowpass" data-param="Q">
+							<span class="scope scope-min">0.7</span>
+							<span class="param">Q</span>  
+						</div>
+						</div>
+					</div>
+	
+				</div>
+			</div>
+		</div>
+		</div>
+		
+	</div>
+	
 
 	<script src="/src.a2b27638.js">
 	</script>
+
 </body>
 
 </html>

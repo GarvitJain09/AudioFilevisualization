@@ -1,5 +1,28 @@
+html {
+  height: 100%;
+}
 body {
   font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.hide {
+  display: none;
+}
+
+.uploadlabel {
+  border: 2px solid green;
+  padding: 12px;
+  border-radius: 6px;
+  box-shadow: 0;
+  transition: box-shadow 1s;
+}
+
+.uploadlabel:hover {
+  box-shadow: 4px 6px black;
 }
 
 
