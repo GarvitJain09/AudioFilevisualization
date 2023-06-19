@@ -121,7 +121,53 @@ function volumeChange(e) {
 volumneControl.addEventListener("change", volumeChange);
 function visual() {
   audioCtx = audioCtx || new AudioContext();
+  if (!audioSource) {
+    audioSource =
+      audioSource ||
+      audioCtx.createMediaElementSource(document.getElementById("audio"));
+    analyser = audioCtx.createAnalyser();
+    audioSource.connect(analyser);
+    analyser.connect(audioCtx.destination);
+  }
+
   const ctx = canvas.getContext("2d");
+  // var highShelf = audioCtx.createBiquadFilter();
+  // var lowShelf = audioCtx.createBiquadFilter();
+  // var highPass = audioCtx.createBiquadFilter();
+  // var lowPass = audioCtx.createBiquadFilter();
+
+  // audioSource.connect(highShelf);
+  // highShelf.connect(lowShelf);
+  // lowShelf.connect(highPass);
+  // highPass.connect(lowPass);
+  // lowPass.connect(audioCtx.destination);
+
+  // highShelf.type = "highshelf";
+  // highShelf.frequency.value = 4700;
+  // highShelf.gain.value = 50;
+
+  // lowShelf.type = "lowshelf";
+  // lowShelf.frequency.value = 35;
+  // lowShelf.gain.value = 50;
+
+  // highPass.type = "highpass";
+  // highPass.frequency.value = 800;
+  // highPass.Q.value = 0.7;
+
+  // lowPass.type = "lowpass";
+  // lowPass.frequency.value = 880;
+  // lowPass.Q.value = 0.7;
+
+  // var ranges = document.querySelectorAll("input[type=range]");
+  // ranges.forEach(function (range) {
+  //   range.addEventListener("input", function () {
+  //     console.log(this, range.getAttribute("data-filter"),);
+  //     //       biquadFilter.type = "lowshelf";
+  //     // biquadFilter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+  //     // biquadFilter.gain.setValueAtTime(25, audioCtx.currentTime);
+  //     // window[this.dataset.filter][this.dataset.param].value = this.value;
+  //   });
+  // });
 
   var playPromise;
 
@@ -136,14 +182,7 @@ function visual() {
       })
       .catch((error) => {});
   }
-  if (!audioSource) {
-    audioSource =
-      audioSource ||
-      audioCtx.createMediaElementSource(document.getElementById("audio"));
-    analyser = audioCtx.createAnalyser();
-    audioSource.connect(analyser);
-    analyser.connect(audioCtx.destination);
-  }
+
   analyser.fftSize = 128;
   const bufferLength = analyser.frequencyBinCount;
   const dataArray = new Uint8Array(bufferLength);
@@ -202,5 +241,18 @@ document
     console.log(e.currentTarget.value);
     audioControl.playbackRate = e.currentTarget.value;
   });
+
+document
+  .getElementById("equalizerSettings")
+  .addEventListener("click", function (e) {
+    document.getElementById("equalizerDiv").classList.remove("hide");
+    e.stopPropagation();
+  });
+$(window).click(function () {
+  if (!document.querySelector("#equalizerDiv").classList.contains("hide")) {
+    document.getElementById("equalizerDiv").classList.add("hide");
+  }
+  //Hide the menus if visible
+});
 
 // Show loading animation.
