@@ -117,213 +117,62 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/index.js":[function(require,module,exports) {
-var audioControl = document.getElementById("audio");
-currentVolume = 25;
-var volumneControl = document.getElementById("volume-control");
-var seekslider = document.getElementById("seekslider");
-var seekto, seeking;
-var audioSource = null;
-var analyser = null;
-var audioCtx = null;
-var audio1 = audioControl;
-var r = 0,
-  g = 0,
-  b = 0;
-audio1.crossOrigin = "anonymous";
-var ranges = document.querySelectorAll("input[type=range]");
-var canvas = document.getElementById("canvas");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-audioControl.addEventListener("timeupdate", function () {
-  seekslider.value = "0";
-  seektimeupdate();
-});
-seekslider.addEventListener("mousedown", function (event) {
-  seeking = true;
-  seek(event);
-});
-seekslider.addEventListener("mousemove", function (event) {
-  seek(event);
-});
-seekslider.addEventListener("mouseup", function () {
-  seeking = false;
-});
-function seek(event) {
-  if (seeking) {
-    seekslider.value = event.clientX - seekslider.offsetLeft;
-    seekto = audioControl.duration * (seekslider.value / 100);
-    audioControl.currentTime = seekto;
+})({"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
   }
+  return bundleURL;
 }
-function seektimeupdate() {
-  var nt = audioControl.currentTime * (100 / audioControl.duration);
-  if (isNaN(nt)) {
-    seekslider.value = "0";
-  } else {
-    seekslider.value = nt;
-  }
-  if (audioControl.currentTime === audioControl.duration) {
-    document.getElementById("play").classList.remove("fa-pause");
-    document.getElementById("play").classList.add("fa-play");
-  }
-}
-function handleFiles(event) {
-  var files = event.target.files;
-  $("#src").attr("src", URL.createObjectURL(files[0]));
-  document.getElementById("audio").load();
-  seekslider.value = "0";
-  document.getElementById("audioDiv").classList.remove("hide");
-  if (document.getElementById("play").classList.contains("fa-pause")) {
-    document.getElementById("play").classList.remove("fa-pause");
-    document.getElementById("play").classList.add("fa-play");
-  }
-
-  // event.preventDefault();
-}
-
-document.getElementById("uploadDiv").addEventListener("change", handleFiles);
-function audioControls(event) {
-  if (event.target.id === "play") {
-    if (document.getElementById("play").classList.contains("fa-play")) {
-      audioControl.play();
-      document.getElementById("play").classList.remove("fa-play");
-      document.getElementById("play").classList.add("fa-pause");
-    } else if (document.getElementById("play").classList.contains("fa-pause")) {
-      audioControl.pause();
-      document.getElementById("play").classList.remove("fa-pause");
-      document.getElementById("play").classList.add("fa-play");
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+    if (matches) {
+      return getBaseURL(matches[0]);
     }
   }
-  if (event.target.id === "forward") {
-    audioControl.currentTime += 5;
-  }
-  if (event.target.id === "backward") {
-    audioControl.currentTime -= 5;
-  }
-  if (event.target.id === "volume-icon") {
-    if (document.getElementById("volume-icon").classList.contains("fa-volume-xmark")) {
-      document.getElementById("volume-icon").classList.remove("fa-volume-xmark");
-      document.getElementById("volume-icon").classList.add("fa-volume-high");
-      if (currentVolume === "0") {
-        volumneControl.value = "25";
-        audioControl.volume = "2.5";
-      } else {
-        audioControl.volume = currentVolume / 100;
-        volumneControl.value = "" + currentVolume + "";
-      }
-    } else if (document.getElementById("volume-icon").classList.contains("fa-volume-high")) {
-      audioControl.volume = 0;
-      volumneControl.value = 0;
-      document.getElementById("volume-icon").classList.remove("fa-volume-high");
-      document.getElementById("volume-icon").classList.add("fa-volume-xmark");
-    }
-  }
+  return '/';
 }
-function volumeChange(e) {
-  currentVolume = volumneControl.value;
-  audioControl.volume = e.currentTarget.value / 100;
-  if (e.currentTarget.value === "0") {
-    document.getElementById("volume-icon").classList.remove("fa-volume-high");
-    document.getElementById("volume-icon").classList.add("fa-volume-xmark");
-  } else if (document.getElementById("volume-icon").classList.contains("fa-volume-xmark")) {
-    document.getElementById("volume-icon").classList.remove("fa-volume-xmark");
-    document.getElementById("volume-icon").classList.add("fa-volume-high");
-  }
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)?\/[^/]+(?:\?.*)?$/, '$1') + '/';
 }
-volumneControl.addEventListener("change", volumeChange);
-function visual() {
-  audioCtx = audioCtx || new AudioContext();
-  var ctx = canvas.getContext("2d");
-  if (!audioSource) {
-    audioSource = audioSource || audioCtx.createMediaElementSource(document.getElementById("audio"));
-    analyser = audioCtx.createAnalyser();
-    audioSource.connect(analyser);
-    analyser.connect(audioCtx.destination);
-  }
-  filter = audioCtx.createBiquadFilter();
-  audioSource.connect(filter);
-  filter.connect(audioCtx.destination);
-  ranges.forEach(function (range) {
-    range.addEventListener("change", function () {
-      filter.type = range.getAttribute("data-filter");
-      filter.gain.value = range.getAttribute("data-param") === "gain" ? range.value : 0;
-      filter.frequency.value = range.getAttribute("data-param") === "frequency" ? range.value : 0;
-    });
-  });
-  var playPromise;
-  if (playPromise !== undefined) {
-    playPromise.then(function (_) {
-      if (!audioControl.paused) {
-        audioControl.play();
-      } else {
-        audioControl.pause();
-      }
-    }).catch(function (error) {});
-  }
-  analyser.fftSize = 128;
-  var bufferLength = analyser.frequencyBinCount;
-  var dataArray = new Uint8Array(bufferLength);
-  var barWidth = canvas.width / 2 / bufferLength;
-  var x = 0;
-  function animate() {
-    x = 0;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    analyser.getByteFrequencyData(dataArray);
-    drawVisualizer({
-      bufferLength: bufferLength,
-      dataArray: dataArray,
-      barWidth: barWidth
-    });
-    requestAnimationFrame(animate);
-  }
-  var drawVisualizer = function drawVisualizer(_ref) {
-    var bufferLength = _ref.bufferLength,
-      dataArray = _ref.dataArray,
-      barWidth = _ref.barWidth;
-    var barHeight;
-    for (var i = 0; i < bufferLength; i++) {
-      barHeight = dataArray[i];
-      ctx.fillStyle = "rgb(".concat(r, ", ").concat(g, ", ").concat(b, ")");
-      ctx.fillRect(canvas.width / 2 - x, canvas.height - barHeight, barWidth, barHeight);
-      x += barWidth;
-    }
-    for (var _i = 0; _i < bufferLength; _i++) {
-      barHeight = dataArray[_i];
-      ctx.fillStyle = "rgb(".concat(r, ", ").concat(g, ", ").concat(b, ")");
-      ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-      x += barWidth;
-    }
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+function updateLink(link) {
+  var newLink = link.cloneNode();
+  newLink.onload = function () {
+    link.remove();
   };
-  animate();
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
 }
-document.getElementById("colorforChart").addEventListener("change", function (e) {
-  r = parseInt(e.currentTarget.value.slice(1, 3), 16);
-  g = parseInt(e.currentTarget.value.slice(3, 5), 16);
-  b = parseInt(e.currentTarget.value.slice(5, 7), 16);
-});
-document.getElementById("app").addEventListener("click", visual);
-document.getElementById("play").addEventListener("click", audioControls);
-document.getElementById("forward").addEventListener("click", audioControls);
-document.getElementById("backward").addEventListener("click", audioControls);
-document.getElementById("volume").addEventListener("click", audioControls);
-document.getElementById("playBackSpeed").addEventListener("change", function (e) {
-  console.log(e.currentTarget.value);
-  audioControl.playbackRate = e.currentTarget.value;
-});
-document.getElementById("equalizerSettings").addEventListener("click", function (e) {
-  document.getElementById("equalizerDiv").classList.remove("hide");
-  e.stopPropagation();
-});
-$(window).click(function () {
-  if (!document.querySelector("#equalizerDiv").classList.contains("hide")) {
-    document.getElementById("equalizerDiv").classList.add("hide");
+var cssTimeout = null;
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
   }
-  //Hide the menus if visible
-});
-
-// Show loading animation.
-},{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+    cssTimeout = null;
+  }, 50);
+}
+module.exports = reloadCSS;
+},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"src/styles.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -492,5 +341,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/index.js"], null)
-//# sourceMappingURL=/src.a2b27638.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/styles.dd855970.js.map
