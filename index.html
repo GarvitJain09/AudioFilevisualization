@@ -47,13 +47,13 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 						<div class="sliders">
 						<div class="range-slider">
 							<span class="scope">22</span>
-							<input type="range" class="vertical" min="4700" max="22000" step="100" value="4700" data-filter="highShelf" data-param="frequency">
+							<input type="range" id='highShelf_frequency' class="vertical" min="4700" max="6000" step="100" value="2000" data-filter="highshelf" data-param="frequency">
 							<span class="scope scope-min">4.7</span>
 							<span class="param">kHz</span>  
 						</div>
 						<div class="range-slider">
 							<span class="scope">50</span>
-							<input type="range" class="vertical" min="-50" max="50" value="50" data-filter="highShelf" data-param="gain">
+							<input type="range" id='highShelf_gain' class="vertical" min="-50" max="50" value="50" data-filter="highshelf" data-param="gain">
 							<span class="scope scope-min">-50</span>
 							<span class="param">dB</span>  
 						</div>
@@ -65,13 +65,13 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 						<div class="sliders">
 						<div class="range-slider">
 							<span class="scope">220</span>
-							<input type="range" class="vertical" min="35" max="220" step="1" value="35" data-filter="lowShelf" data-param="frequency">
+							<input type="range" class="vertical" min="35" max="400" step="1" value="200" data-filter="lowshelf" data-param="frequency">
 							<span class="scope scope-min">35</span>
 							<span class="param">Hz</span>  
 						</div>
 						<div class="range-slider">
 							<span class="scope">50</span>
-							<input type="range" class="vertical" min="-50" max="50" value="50" data-filter="lowShelf" data-param="gain">
+							<input type="range" class="vertical" min="-50" max="50" value="50" data-filter="lowshelf" data-param="gain">
 							<span class="scope scope-min">-50</span>
 							<span class="param">dB</span>  
 						</div>
@@ -83,13 +83,13 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 						<div class="sliders">
 						<div class="range-slider">
 							<span class="scope">5.9</span>
-							<input type="range" class="vertical" min="800" max="5900" step="100" value="800" data-filter="highPass" data-param="frequency">
+							<input type="range" class="vertical" min="800" max="5900" step="100" value="800" data-filter="highpass" data-param="frequency">
 							<span class="scope scope-min">0.8</span>
 							<span class="param">kHz</span>  
 						</div>
 						<div class="range-slider">
 							<span class="scope">12</span>
-							<input type="range" class="vertical" min="0.7" max="12" step="0.1" value="0.7" data-filter="highPass" data-param="Q">
+							<input type="range" class="vertical" min="0.7" max="12" step="0.1" value="0.7" data-filter="highpass" data-param="Q">
 							<span class="scope scope-min">0.7</span>
 							<span class="param">Q</span>  
 						</div>
@@ -101,13 +101,13 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 						<div class="sliders">
 						<div class="range-slider">
 							<span class="scope">1600</span>
-							<input type="range" class="vertical" min="80" max="1600" step="10" value="880" data-filter="lowPass" data-param="frequency">
+							<input type="range" class="vertical" min="80" max="1600" step="10" value="880" data-filter="lowpass" data-param="frequency">
 							<span class="scope scope-min">80</span>
 							<span class="param">Hz</span>  
 						</div>
 						<div class="range-slider">
 							<span class="scope">12</span>
-							<input type="range" class="vertical" min="0.7" max="12" step="0.1" value="0.7" data-filter="lowPass" data-param="Q">
+							<input type="range" class="vertical" min="0.7" max="12" step="0.1" value="0.7" data-filter="lowpass" data-param="Q">
 							<span class="scope scope-min">0.7</span>
 							<span class="param">Q</span>  
 						</div>

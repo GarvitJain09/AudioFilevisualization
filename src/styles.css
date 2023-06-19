@@ -85,7 +85,8 @@
 #volume,
 #seeksliderDiv,
 #playBackSpeed,
-#colorforChart {
+#colorforChart,
+#equalizerDiv {
   border: 2px solid transparent;
   border-radius: 6px;
   text-align: center;
@@ -99,7 +100,8 @@
 #volume:hover,
 #seeksliderDiv:hover,
 #playBackSpeed:hover,
-#colorforChart:hover {
+#colorforChart:hover,
+#equalizerDiv:hover {
   box-shadow: 3px -3px 4px 1px black;
   padding: 5px;
 }
